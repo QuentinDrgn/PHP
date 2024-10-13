@@ -1,17 +1,23 @@
-version: "3"
-
 services:
   webserver:
     image: nginx:latest
     ports:
       - "80:80"
     volumes:
-      - ./services/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - ../CV/Index:/app
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Load your custom nginx config
+      - ../public:/public  # Mount the public directory correctly
+      - ../app:/app  # Mount the app directory
+
   app:
-    build: services/php
+    build:
+      context: ..  # Context should be the parent directory
+      dockerfile: docker/Dockerfile  # Path to your Dockerfile
     volumes:
-      - ../CV/Index:/app
+      - ../app:/app  # Mount the app directory
+      - ../public:/public  # Mount the public directory correctly
+    expose:
+      - "9000"
+
   db:
     image: mariadb:latest
     environment:
