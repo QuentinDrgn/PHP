@@ -1,0 +1,344 @@
+/* General styles for body and container */
+body {
+  font-family: 'Oswald', sans-serif;
+  background-color: #241D21;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(1, 0.5fr); /* Two equal columns */
+  grid-template-rows: repeat(2, 0.2fr);    /* Two equal rows */
+  width: 65%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 1rem;
+  min-height: 300px; /* Add a min-height */
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.boxImg {
+  grid-column: 1; /* First column */
+  grid-row: 1;    /* First row */
+}
+
+.boxName {
+  grid-column: 2; /* Second column */
+  grid-row: 1;    /* First row */
+}
+
+.boxInfos {
+  grid-column: 1; /* First column */
+  grid-row: 2;    /* Second row */
+}
+
+.boxSkills {
+  grid-column: 2; /* Second column */
+  grid-row: 2;    /* Second row */
+}
+
+.boxImg {
+  width: 100%; /* Image will take the full width of its container */
+  height: 100%; /* Maintain aspect ratio */
+  border-top: 2px solid #E7E6E5;
+  border-left: 2px solid #E7E6E5;
+  border-right: 1px solid #E7E6E5;
+  border-radius: 1.2rem 0rem 0rem 0rem;
+}
+
+.profilPic {
+  min-width: 110px; /* Set a minimum width */
+  max-width: 220px; 
+  min-height: 110px; /* Set a minimum height */
+  max-height: 220px;
+  border-radius: 1rem 0rem 0rem 0rem;
+}
+
+.boxName {
+  font-size: 32px;
+  font-weight: bold;
+  text-align:left - 2rem;
+  display: flex;
+  justify-content: left;
+  align-items: top;
+  background-color: #E7E6E5;
+  border-radius: 0rem 1.2rem 0rem 0rem;
+  padding-left: 2rem;
+  border-top: 2px solid #E7E6E5;
+  border-right: 2px solid #E7E6E5;
+  color: #2f262b;
+  border-bottom: 8px solid #2f262b;
+}
+
+.boxName p {
+  font-size: 18px; 
+  color: #2f262b; 
+  font-weight: 500;
+  display: flex;
+  justify-items: left;
+  align-items: center;
+}
+
+.boxInfos {
+  font-size: 18px;
+  height:90%;
+  color: #e1e1e1;
+  background-color: #2f262b;
+  border-bottom: 2px solid #E7E6E5;
+  border-left: 2px solid #E7E6E5;
+  border-radius: 0rem 0rem 0rem 1.2rem;
+  margin-top: -0.16rem;
+  padding: 1.5rem;
+
+}
+
+.boxSkills {
+  font-size: 18px;
+  height: 90%;
+  border-bottom: 2px solid #E7E6E5;
+  border-right: 2px solid #E7E6E5;
+  border-radius: 0rem 0rem 1.2rem 0rem;
+  margin-top: -0.16rem;
+  background-color: #E7E6E5;
+  color: #3e4337;
+  padding: 1.5rem;
+  
+
+}
+
+section {
+  margin-top: 2.25rem;
+}
+
+section p {
+  color: #333;
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #E7E6E5;
+  margin: 15% auto;
+  padding: 20px;
+  border: 2px solid #888;
+  width: 50%;
+  border-radius: 1rem;
+  color: #241D21;
+  font-family: 'Oswald', sans-serif;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Form styling inside the modal */
+form {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+label,
+input,
+textarea {
+  margin-bottom: 10px;
+}
+
+input,
+textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="submit"] {
+  background-color: #8C947C;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+input[type="submit"]:hover {
+  background-color: #847C94;
+}
+
+h1 {
+  font-size: 56px;
+  text-align: center;
+  color:#E7E6E5;
+  margin: 0 auto;
+  padding: 5rem;
+}
+
+.loginButton {
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 30px;
+}
+
+.projects h2 {
+  margin-bottom: 2rem;
+}
+
+.projects p {
+  margin-bottom: 4rem;
+}
+
+.technologies ul {
+  color: #333;
+}
+
+.experience ul {
+  color: #333;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #E7E6E5;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.5rem;
+  z-index: 1;
+  border-bottom: 0.2rem solid #333;
+}
+
+a {
+  color: #241D21;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 0.5rem;
+}
+
+a:hover {
+  color: #241D21;
+  text-decoration: underline 2px;
+  border-radius: 0.5rem;
+  background-color: #8C947C;
+  border: #12171D;
+}
+
+footer {
+  color: #8C947C;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  font-size: 18px;
+}
+
+#editBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #8C947C;
+  color: #FBEAEB;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #E7E6E5;
+}
+
+#editBtn:hover {
+  background-color: #E7E6E5;
+  color: #8C947C;
+}
+
+.editTitleButton {
+  background-color: transparent; /* Transparent background */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 0; /* Remove padding */
+  color: #8C947C; /* Color of the icon */
+  font-size: 0.8em;
+}
+
+
+h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#editStyleBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #8C947C;
+  color: #FBEAEB;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #E7E6E5;
+}
+
+#editStyleBtn:hover {
+  background-color: #E7E6E5;
+  color: #8C947C;
+}
+
+#saveStyleBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #8C947C;
+  color: #E7E6E5;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 0.5rem;
+}
+
+#saveStyleBtn:hover {
+  background-color: #847C94;
+}
+
+.color-preview {
+  width: 50px; 
+  height: 20px;
+  border: 0.2px solid #000;
+  border-radius: 5px;
+}
+
+#contact {
+  text-decoration: none;
+  color: #8C947C;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#contact:hover {
+  color: #241D21;
+}
