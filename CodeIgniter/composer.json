@@ -1,6 +1,6 @@
 {
-    "name": "codeigniter4/framework",
-    "description": "The CodeIgniter framework v4",
+    "name": "quentind/cvportfolio",
+    "description": "Website to stock and display my CV and portfolio",
     "license": "MIT",
     "type": "project",
     "homepage": "https://codeigniter.com",
@@ -49,7 +49,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CodeIgniter\\": "system/"
+            "App\\": "app/"
         },
         "exclude-from-classmap": [
             "**/Database/Migrations/**"

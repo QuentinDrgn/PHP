@@ -79,6 +79,11 @@ footer {
     padding-bottom: 2rem;
     border-radius: 0.5rem;
     font-weight: bolder;
+    border-top: solid 2rem #8C947C;
+    border-bottom: solid 0.2rem #8C947C;
+    border-left : solid 0.2rem #8C947C;
+    border-right : solid 0.2rem #8C947C;
+    border-radius: 0.5rem;
 }
 
 input {
@@ -88,6 +93,9 @@ input {
     justify-content: center;
     align-items: column;
     margin: 32px 32px;
+    border-radius: 0.5rem;
+    background-color: #E7E6E5;
+    border: solid 0.1rem #241D21;
 }
 
 textarea {
@@ -98,6 +106,9 @@ textarea {
     align-items: column;
     margin: 32px 32px;
     height: 30px;
+    border-radius: 0.5rem;
+    background-color: #E7E6E5;
+    border: solid 0.1rem #241D21;
 }
 
 #sendMailBtn {

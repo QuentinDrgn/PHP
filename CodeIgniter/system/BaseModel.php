@@ -1285,7 +1285,7 @@ abstract class BaseModel
         $perPage     = $this->pager->getPerPage($group);
         $offset      = ($pager->getCurrentPage($group) - 1) * $perPage;
 
-        return $this->findAll($perPage, $offset);
+        return $this->findAll($perPage, (int) $offset);
     }
 
     /**

@@ -1,8 +1,9 @@
 <?php
 session_start(); // Start the session
 
-require '../app/Models/db.php';
- // Include the database connection
+require '../app/Models/db.php'; // Ensure this is included
+
+// Include the database connection
 
 $isLoggedIn = isset($_SESSION['username']); // Check if the user is logged in
 $username = $isLoggedIn ? $_SESSION['username'] : null;
@@ -34,7 +35,7 @@ Here, you will find my detailed CV highlighting my educational background, work 
 
 Whether you are a potential employer, a fellow professional, or simply curious about my work, I hope you find inspiration and insight as you navigate through my projects. If you have any questions or would like to connect, please dont hesitate to reach out.</p>';
         echo '<footer>
-                <h4>&copy; 2024 PORTFOLIO / CV | <a href="/contact" id="contact">CONTACT US</a></h4>
+                <h4>&copy; 2024 PORTFOLIO / CV | <u><a href="/contact" id="contact">CONTACT US</a></h4></u>
             </footer>';
         break;
 

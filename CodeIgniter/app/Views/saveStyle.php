@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['username'])) {
     $user = $stmt->fetch();
 
     // If not a user, check if they are an admin
+    $admin = null;
     if (!$user) {
         $stmt = $pdo->prepare('SELECT id FROM admins WHERE username = ?');
         $stmt->execute([$username]);

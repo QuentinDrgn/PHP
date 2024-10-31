@@ -4,15 +4,17 @@ USE my_dbase;
 -- Create table for personal information
 CREATE TABLE IF NOT EXISTS personal_info (
     id VARCHAR(50) PRIMARY KEY NOT NULL,
-    id_user VARCHAR(50) UNIQUE NOT NULL,
+    id_user VARCHAR(50) UNIQUE,
     name VARCHAR(100) UNIQUE NOT NULL,
     title VARCHAR(150) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20) UNIQUE NOT NULL,
     profile_description TEXT NOT NULL,
+    id_admin VARCHAR(50) UNIQUE,
     FOREIGN KEY (id_user) REFERENCES users(id),
     FOREIGN KEY (email) REFERENCES users(email),
-    FOREIGN KEY (phone) REFERENCES users(phone)
+    FOREIGN KEY (phone) REFERENCES users(phone),
+    FOREIGN KEY (id_admin) REFERENCES admins(id)
 );
 
 -- Insert default data
@@ -73,4 +75,8 @@ CREATE TABLE IF NOT EXISTS projects (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (admin_id) REFERENCES admins(id)
 );
+
+ALTER TABLE personal_info
+ADD COLUMN id_admin VARCHAR(50) NULL, -- Allow id_admin to be NULL
+MODIFY COLUMN id_user VARCHAR(50) NULL; -- Allow id_user to be NULL
 

@@ -78,7 +78,7 @@ if ($isLoggedIn && $role == "admin") {
         </form>
     </div>
     <footer>
-        <h4>&copy; 2024 PORTFOLIO / CV | <a href="/contact" id="contact">CONTACT US</a></h4>
+        <h4>&copy; 2024 PORTFOLIO / CV | <u><a href="/contact" id="contact">CONTACT US</a></h4></u>h4>
     </footer>
 </body>
 </html>

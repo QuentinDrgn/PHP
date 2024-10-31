@@ -4,8 +4,13 @@ FROM php:8.1-fpm
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install necessary PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+# Install necessary packages and PHP extensions
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    && docker-php-ext-install pdo pdo_mysql \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install other necessary packages if required
 # For example: install the GD extension for image manipulation

@@ -65,3 +65,66 @@ footer {
 #contact:hover {
     color: #241D21;
 }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Space between the two columns */
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+}
+.form-container {
+    flex: 1; /* Allow both forms to grow equally */
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+#createUserForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#createAdminForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#submitBtn {
+    background-color: #8C947C;
+    color: #f9f9f9;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 0.5rem;
+    border: 0.1rem solid #E7E6E5;
+}
+
+#submitBtn:hover {
+    background-color: #847C94;
+}
+
+.arrow {
+    transition: transform 0.3s;
+}
+.arrow.open {
+    transform: rotate(90deg); /* Rotate arrow when opened */
+}
+
+.form-title {
+    background-color: #8C947C !important;
+    color: #f9f9f9;
+    padding: 10px;
+    border: solid 0.1rem #232323;
+    border-radius: 0.5rem; 
+}

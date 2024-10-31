@@ -61,8 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$email]);
         $id_user = $stmt->fetchColumn();
 
-        $stmt = $pdo->prepare('INSERT INTO personal_info (id, id_user, name, title, email, phone, profile_description) VALUES (UUID(), ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$id_user, $name, $title, $email, $phone, $personalInfo]);
+        $stmt = $pdo->prepare('INSERT INTO personal_info (id, name, title, email, phone, profile_description) VALUES (UUID(), ?, ?, ?, ?, ?)');
+        $stmt->execute([$name, $title, $email, $phone, $personalInfo]);
 
         // Set session for the newly signed-up user
         $_SESSION['username'] = $username;
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
     <footer>
-        <h4>&copy; 2024 PORTFOLIO / CV | <a href="/contact" id="contact">CONTACT US</a></h4>
+        <h4>&copy; 2024 PORTFOLIO / CV | <u><a href="/contact" id="contact">CONTACT US</a></h4></u></h4>
     </footer>
 </body>
 

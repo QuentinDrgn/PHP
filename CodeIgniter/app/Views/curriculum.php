@@ -8,6 +8,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
 $role = $_SESSION['role'] ?? null;
 
 $userId = null;
+$adminId = null;
+$admin = null;
+$emailError = $nameError = $phoneError = null;
+$formSubmitted = false;
 
 // Fetch the user ID of the currently logged-in user
 if ($isLoggedIn) {
@@ -15,7 +19,7 @@ if ($isLoggedIn) {
     $stmt->execute([$username]);
     $user = $stmt->fetch();
 
-    if ($user) {
+    if ($role == "user") {
         $userId = $user['id'];
         $isAdmin = false; // Not an admin
     } else {
@@ -23,8 +27,8 @@ if ($isLoggedIn) {
         $stmt->execute([$username]);
         $admin = $stmt->fetch();
 
-        if ($admin) {
-            $userId = $admin['id'];
+        if ($role == "admin") {
+            $adminId = $admin['id'];
             $isAdmin = true; // Admin user
         }
     }
@@ -36,6 +40,10 @@ if ($userId) {
     $stmt = $pdo->prepare('SELECT * FROM personal_info WHERE id_user = ?'); // Assuming `id_user` references the user
     $stmt->execute([$userId]);
     $personalInfo = $stmt->fetch();
+} else if ($adminId) {
+    $stmt = $pdo->prepare('SELECT * FROM personal_info WHERE id_admin = ?'); // Assuming `id_admin` references the admin
+    $stmt->execute([$adminId]);
+    $personalInfo = $stmt->fetch();
 }
 
 $styles = null;
@@ -43,7 +51,7 @@ if ($isLoggedIn) {
     if ($isAdmin) {
         // Admin user, query using admin_id
         $stmt = $pdo->prepare('SELECT * FROM style_settings WHERE admin_id = ?');
-        $stmt->execute([$userId]);
+        $stmt->execute([$adminId]);
     } else {
         // Regular user, query using user_id
         $stmt = $pdo->prepare('SELECT * FROM style_settings WHERE user_id = ?');
@@ -54,6 +62,8 @@ if ($isLoggedIn) {
 
 // Handle form submission and update the database (admin only)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $formSubmitted = true;
+
     $name = $_POST['name'];
     $title = $_POST['title'];
     $email = $_POST['email'];
@@ -66,18 +76,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $profileDescription = $_POST['profileDescription'];
 
     // Update personal information in the database
-    if ($personalInfo) {
-        $stmt = $pdo->prepare('UPDATE personal_info SET name = ?, title = ?, email = ?, phone = ?, profile_description = ?, languages = ?, interest = ?, formation = ?, profile = ?, technologies = ? WHERE id_user = ?');
-        $stmt->execute([$name, $title, $email, $phone, $profileDescription, $languages, $interest, $formation, $profile, $technologies, $userId]);
-    } else {
-        $stmt = $pdo->prepare('INSERT INTO personal_info (id, id_user, name, title, email, phone, profile_description) VALUES (UUID(), ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$userId, $name, $title, $email, $phone, $profileDescription]);
+    try {
+        if ($personalInfo) {
+            if ($admin) {
+                $stmt = $pdo->prepare('UPDATE personal_info SET name = ?, title = ?, email = ?, phone = ?, profile_description = ?, languages = ?, interest = ?, formation = ?, profile = ?, technologies = ? WHERE id_admin = ?');
+                $stmt->execute([$name, $title, $email, $phone, $profileDescription, $languages, $interest, $formation, $profile, $technologies, $adminId]);
+            } else if ($user) {
+                $stmt = $pdo->prepare('UPDATE personal_info SET name = ?, title = ?, email = ?, phone = ?, profile_description = ?, languages = ?, interest = ?, formation = ?, profile = ?, technologies = ? WHERE id_user = ?');
+                $stmt->execute([$name, $title, $email, $phone, $profileDescription, $languages, $interest, $formation, $profile, $technologies, $userId]);
+            }
+        } else {
+            if ($admin) {
+                $stmt = $pdo->prepare('INSERT INTO personal_info (id, id_admin, name, title, email, phone, profile_description) VALUES (UUID(), ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$adminId, $name, $title, $email, $phone, $profileDescription]);
+            } else if ($user) {
+                $stmt = $pdo->prepare('INSERT INTO personal_info (id, id_user, name, title, email, phone, profile_description) VALUES (UUID(), ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$userId, $name, $title, $email, $phone, $profileDescription]);
+            }
+        }
+        // Redirect to the CV page to reflect the changes
+        header('Location: /curriculum');
+        exit;
+    } catch (PDOException $e) {
+        // This block handles the errors
+        $alertMessage = '';
+        if ($e->getCode() === '23000') { // SQLSTATE code for integrity constraint violation
+            if (strpos($e->getMessage(), 'email') !== false) {
+                $alertMessage = "Email already exists.";
+            } elseif (strpos($e->getMessage(), 'phone') !== false) {
+                $alertMessage = "Phone number already exists.";
+            } elseif (strpos($e->getMessage(), 'name') !== false) {
+                $alertMessage = "Name already exists.";
+            }
+        } else {
+            $alertMessage = "An error occurred: " . htmlspecialchars($e->getMessage());
+        }
     }
-    // Redirect to the CV page to reflect the changes
-    header("Location: /curriculum");
-    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -88,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curriculum Vitae</title>
     <link rel="stylesheet" href="CSS/curriculum.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <?php if ($styles): ?>
         <style>
             .boxImg,
@@ -156,6 +192,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo '<button id="editBtn">Edit Profile Info</button>';
         echo '<button id="editStyleBtn">Edit Style</button>';
     } ?>
+    <?php if (!empty($alertMessage) && $formSubmitted): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '<?php echo addslashes($alertMessage); ?>',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    <?php endif; ?>
     <div class="container">
         <!-- Header Section -->
         <div class="boxImg">
@@ -235,18 +281,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Edit Personal Information</h2>
-                <form method="POST" action="">
+                <form id="infoForm" method="POST" action="">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" value="<?php echo $isLoggedIn ? ($personalInfo['name'] ?? 'John Doe') : 'John Doe'; ?>" required>
+                    <?php if ($nameError): ?>
+                        <div id="errorName" class="error"><?php echo $nameError; ?></div>
+                    <?php endif; ?>
 
                     <label for="title">Title:</label>
                     <input type="text" id="title" name="title" value="<?php echo $isLoggedIn ? ($personalInfo['title'] ?? 'Admin Skills') : 'Admin Skills'; ?>" required>
 
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" value="<?php echo $isLoggedIn ? ($personalInfo['email'] ?? 'admin@example.com') : 'admin@example.com'; ?>" required>
+                    <?php if ($emailError): ?>
+                        <div id="errorEmail" class="error"><?php echo $emailError; ?></div>
+                    <?php endif; ?>
 
                     <label for="phone">Phone:</label>
                     <input type="text" id="phone" name="phone" value="<?php echo $isLoggedIn ? ($personalInfo['phone'] ?? '00/00/00/00/00') : '00/00/00/00/00'; ?>" required>
+                    <?php if ($phoneError): ?>
+                        <div id="errorPhone" class="error"><?php echo $phoneError; ?></div>
+                    <?php endif; ?>
 
                     <label for="languages">Languages:</label>
                     <input type="text" id="languages" name="languages" value="<?php echo $isLoggedIn ? ($personalInfo['languages'] ?? 'English') : 'English'; ?>" required>
@@ -266,7 +321,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="profileDescription">Profile Description:</label>
                     <textarea id="profileDescription" name="profileDescription" required><?php echo $isLoggedIn ? ($personalInfo['profile_description'] ?? 'I am a passionate web developer with experience in creating dynamic websites and applications.') : 'I am a passionate web developer with experience in creating dynamic websites and applications.'; ?></textarea>
 
-                    <input type="submit" value="Save Changes">
+                    <button id="saveInfos" type="submit">Save changes</button>
                 </form>
             </div>
         </div>
@@ -341,7 +396,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <footer>
-        <h4>&copy; 2024 PORTFOLIO / CV | <a href="/contact" id="contact">CONTACT US</a></h4>
+        <h4>&copy; 2024 PORTFOLIO / CV | <u><a href="/contact" id="contact">CONTACT US</a></h4></u></h4>
     </footer>
 
     <script>
